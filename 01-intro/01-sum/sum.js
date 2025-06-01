@@ -1,6 +1,9 @@
 import { error } from "console"
 
 export default function sum(a, b) {
-  if(typeof a === 'number' && typeof b === 'number') return a + b
-  throw new TypeError('TypeError')
+  if ([a, b].some((value) => typeof value !== "number")) {
+    throw new TypeError();
+  }
+
+  return a + b;
 }
