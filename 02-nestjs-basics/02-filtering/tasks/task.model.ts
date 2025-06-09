@@ -10,3 +10,5 @@ export interface Task {
   description: string;
   status: TaskStatus;
 }
+
+export type SortParam = "status" | "description"

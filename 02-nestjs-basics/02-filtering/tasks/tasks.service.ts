@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { Task, TaskStatus } from "./task.model";
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { Task, TaskStatus, SortParam } from "./task.model";
 
 @Injectable()
 export class TasksService {
@@ -36,9 +36,37 @@ export class TasksService {
     },
   ];
 
+  isValidStatus(status: string): boolean {  
+    return Object.values(TaskStatus).includes(status as TaskStatus);  
+};  
   getFilteredTasks(
     status?: TaskStatus,
     page?: number,
     limit?: number,
-  ): Task[] {}
+    sortBy?: SortParam
+  ): Task[] {
+    let filteredTask = this.tasks;
+    if(sortBy){
+      if(sortBy !== "description" && sortBy !== "status"){
+        throw new BadRequestException(`sort paametr ${sortBy} is not correct`);
+      }
+      filteredTask = this.tasks.sort((a, b) => a[sortBy] > b[sortBy] ? 1 : -1);     
+    }
+    if(status){
+      if(!this.isValidStatus(status)){
+        throw new BadRequestException(`task status ${status} is not exist`);
+      }
+      filteredTask = filteredTask.filter(t => t.status === status);      
+    }
+    if(page && limit){
+      if(page <= 0 || limit <= 0){
+        throw new BadRequestException(`wrong page or limit`);
+      }
+      const startIndex = (page - 1) * limit;
+      const endIndex = Number(startIndex) + Number(limit);
+      filteredTask  = filteredTask.slice(startIndex, endIndex);
+      
+    }
+    return filteredTask;
+  }
 }
