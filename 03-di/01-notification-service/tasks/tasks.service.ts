@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
 import { CreateTaskDto, Task, TaskStatus, UpdateTaskDto } from "./task.model";
-import { NotificationsService } from "notifications/notifications.service";
-import { UsersService } from "users/users.service";
-import { User, UserValidationDto } from "users/user.model";
+import { NotificationsService } from "../notifications/notifications.service";
+import { UsersService } from "../users/users.service";
+import { User, UserValidationDto } from "../users/user.model";
 import { validate } from 'class-validator';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class TasksService {
     this.tasks.push(task);
     const user: User = this.getUserById(assignedTo);
     await this.validateUserContact(user);
-    await this.notificationService.sendEmail(user.email, '[Новая задача]', `Вы назначены ответственным за задачу: '${title}'`)
+    await this.notificationService.sendEmail(user.email, 'Новая задача', `Вы назначены ответственным за задачу: "${title}"`)
     return task;
   }
 
@@ -41,7 +41,7 @@ export class TasksService {
     Object.assign(task, updateTaskDto);
     const user: User = this.getUserById(task.assignedTo)
     await this.validateUserContact(user);
-    await this.notificationService.sendSMS(user.phone, `Статус задачи '${task.title}' обновлён на '${task.status}'`)
+    await this.notificationService.sendSMS(user.phone, `Статус задачи "${task.title}" обновлён на "${task.status}"`)
     return task;
   }
 
