@@ -27,12 +27,12 @@ export class TasksController {
 
   @Get()
   findAll() {
-    return this.tasksService.findAll()
+    return this.tasksService.findAll();
   }
 
   @Get(":id")
   findOne(@Param("id", ObjectIDPipe) id: ObjectId) {
-    return this.tasksService.findOne(id)
+    return this.tasksService.findOne(id);
   }
 
   @Patch(":id")
@@ -40,11 +40,11 @@ export class TasksController {
     @Param("id", ObjectIDPipe) id: ObjectId,
     @Body() updateTaskDto: UpdateTaskDto,
   ) {
-    return this.tasksService.update(id, updateTaskDto)
+    return this.tasksService.update(id, updateTaskDto);
   }
 
   @Delete(":id")
   remove(@Param("id", ObjectIDPipe) id: ObjectId) {
-    return this.tasksService.remove(id)
+    return this.tasksService.remove(id);
   }
 }
