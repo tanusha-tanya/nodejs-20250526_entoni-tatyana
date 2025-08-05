@@ -16,8 +16,8 @@ import { ChatModule } from "./chat/chat.module";
     }),
     TypeOrmModule.forRoot({
       type: "sqlite",
-      database: ":memory:",
-      synchronize: true,
+      database: "db.sqlite",
+      synchronize: false,
       autoLoadEntities: true,
     }),
     AuthModule,

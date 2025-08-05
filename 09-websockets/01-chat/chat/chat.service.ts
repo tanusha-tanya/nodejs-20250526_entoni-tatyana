@@ -9,7 +9,19 @@ export class ChatService {
     @InjectRepository(Message) private messageRepository: Repository<Message>,
   ) {}
 
-  find() {}
 
-  async create(body: Partial<Message>) {}
+  async create(body: Partial<Message>) {
+    await this.messageRepository.save(body);
+    return body;
+  }
+
+  async getHistory() {
+    const messages = await this.messageRepository.find({ order: { id: 'ASC' } });
+    return messages.map(m => ({
+      id: m.id,
+      username: m.username,
+      text: m.text,
+      date: m.date,
+    }));
+  }
 }

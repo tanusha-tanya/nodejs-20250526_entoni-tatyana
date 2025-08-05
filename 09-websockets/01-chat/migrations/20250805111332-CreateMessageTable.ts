@@ -1,21 +1,20 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InitialSchema1737393873262 implements MigrationInterface {
+export class CreateMessageTable20250805111332 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-        CREATE TABLE user (
+        CREATE TABLE message (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            hash TEXT NOT NULL,
-            role TEXT NOT NULL
+            text TEXT,
+            username TEXT NOT NULL,
+            date DATETIME NOT NULL
         )
     `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      DROP TABLE user
+      DROP TABLE message
     `);
   }
-}
+} 
