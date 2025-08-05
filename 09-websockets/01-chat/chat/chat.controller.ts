@@ -9,6 +9,6 @@ export class ChatController {
     @UseGuards(AuthGuard('jwt'))
     @Get('history')
     async getHistory() {
-        return this.chatService.getHistory();
+        return this.chatService.find();
     }
 }

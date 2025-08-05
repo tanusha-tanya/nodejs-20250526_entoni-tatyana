@@ -23,21 +23,24 @@ export class ChatGateway implements OnGatewayConnection {
   async handleConnection(client: Socket) {
     const token = client.handshake.auth.token;
 
-    if(!token){
-      return client.disconnect(true)
+    if (!token) {
+      client.disconnect(true);
+      return false;
     }
 
     try {
       const payload = await this.jwtService.verifyAsync(token);
       client.data.user = payload;
 
-      // Сообщаем всем КРОМЕ подключившегося
-      client.broadcast.emit('message', {
-        username: 'System',
-        text: `${client.data.user.username} joined the chat.`
-      });      
-    } catch (error){
-      return client.disconnect(true);
+      client.broadcast.emit("message", {
+        username: "System",
+        text: `User ${client.data.user.username} joined the chat.`,
+        date: new Date(),
+      });
+      return true;
+    } catch (error) {
+      client.disconnect(true);
+      return false;
     }
   }
 
@@ -48,15 +51,11 @@ export class ChatGateway implements OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() body: { text: string },
   ) {
-
-    this.server.emit('message', {
-      username: client.data.user.username,
-      text: body.text
-    })
-    this.chatService.create({
+    const message = await this.chatService.create({
       username: client.data.user.username,
       text: body.text,
-      date: new Date()
-    })
+    });
+
+    this.server.emit("message", message);
   }
 }
