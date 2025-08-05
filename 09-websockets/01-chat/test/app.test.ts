@@ -17,8 +17,6 @@ describe("ChatGateway", () => {
   let repository: Repository<Message>;
 
   beforeAll(async () => {
-    await dataSource.initialize();
-    await dataSource.runMigrations();
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
