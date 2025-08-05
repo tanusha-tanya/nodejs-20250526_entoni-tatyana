@@ -8,6 +8,7 @@ import { AppModule } from "../app.module";
 import { Repository } from "typeorm";
 import { Message } from "../chat/entities/message.entity";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import dataSource from '../data-source';
 
 describe("ChatGateway", () => {
   let app: INestApplication;
@@ -16,6 +17,8 @@ describe("ChatGateway", () => {
   let repository: Repository<Message>;
 
   beforeAll(async () => {
+    await dataSource.initialize();
+    await dataSource.runMigrations();
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
